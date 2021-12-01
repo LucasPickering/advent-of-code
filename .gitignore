@@ -1,4 +1,5 @@
 *.hi
 *.o
 .ghc*
+dist/
 dist-newstyle/
