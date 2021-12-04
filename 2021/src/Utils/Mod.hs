@@ -14,3 +14,8 @@ readInputInts = map read <$> readInputLines
 windows :: Int -> [a] -> [[a]]
 -- This solution gives you dwindling windows at the end, so we want to filter those out
 windows n xs = filter ((== n) . length) (Data.List.transpose (take n (tails xs)))
+
+-- | Filter a list, but return both the matches *and* the non-matches, rather
+-- | than throwing the non-matches away. Returns (matches, non-matches)
+filterBoth :: (a -> Bool) -> [a] -> ([a], [a])
+filterBoth predicate = foldr (\e (as, bs) -> if predicate e then (e : as, bs) else (as, e : bs)) ([], [])

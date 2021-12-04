@@ -23,8 +23,11 @@ executable aoc
       Day1
       Day2
       Day3
+      Day4
 
   -- other-extensions:
-  build-depends:       base >=4.12 && <4.13
+  build-depends:
+    base >=4.12 && <4.13,
+    split ==0.2.3.4
   hs-source-dirs:      src
   default-language:    Haskell2010
