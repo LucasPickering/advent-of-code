@@ -1,5 +1,6 @@
 module Day2 where
 
+import Data.List (foldl')
 import Utils.Mod (readInputLines)
 
 type Move = (String, Int)
@@ -17,7 +18,7 @@ part1 :: IO ()
 part1 = do
   input <- readInputLines
   let moves = map parseMove input
-  let pos = foldl applyMoveSimple (0, 0) moves
+  let pos = foldl' applyMoveSimple (0, 0) moves
   putStrLn $ "Final pos: " ++ show pos
   let (h, d) = pos
   putStrLn $ "Answer: " ++ show (h * d)
@@ -26,7 +27,7 @@ part2 :: IO ()
 part2 = do
   input <- readInputLines
   let moves = map parseMove input
-  let pos = foldl applyMove (0, 0, 0) moves
+  let pos = foldl' applyMove (0, 0, 0) moves
   putStrLn $ "Final pos: " ++ show pos
   let (h, d, _) = pos
   putStrLn $ "Answer: " ++ show (h * d)

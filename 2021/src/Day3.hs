@@ -2,7 +2,7 @@ module Day3 where
 
 import Data.Bits (xor)
 import Data.Char (digitToInt)
-import Data.List (transpose)
+import Data.List (foldl', transpose)
 import Utils.Mod (readInputLines)
 
 type Bit = Int
@@ -35,7 +35,7 @@ linesToBitstrings :: [String] -> [BitString]
 linesToBitstrings = map (map digitToInt)
 
 bitstringToInt :: BitString -> Int
-bitstringToInt = foldl (\acc bit -> acc * 2 + bit) 0
+bitstringToInt = foldl' (\acc bit -> acc * 2 + bit) 0
 
 gammaEpsilon :: [BitString] -> (Int, Int)
 gammaEpsilon bitstrings =
