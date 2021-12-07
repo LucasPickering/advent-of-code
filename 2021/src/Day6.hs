@@ -3,11 +3,10 @@
 module Day6 where
 
 import Data.List (foldl')
-import Data.List.Split (splitOn)
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
 import Debug.Trace
-import Utils.Mod (frequency, readInputLines)
+import Utils.Mod (frequency, readInputLines, readInts)
 
 -- | A fixed-length list representing how many lanternfish will spawn in various
 -- | numbers of days. Length is always 9, where index 0 is how many fish spawn
@@ -34,7 +33,7 @@ main days = do
 parseInput :: [String] -> LanternfishCalendar
 -- Input is a single line of comma-separated values
 parseInput [line] =
-  let fishes = map read . splitOn "," $ line
+  let fishes = readInts line
       calendarMap = frequency fishes
    in -- Generate a list with one element per calendar day, and pre-populate it
       map (fromMaybe 0 . (`Map.lookup` calendarMap)) [0 .. 8]

@@ -3,6 +3,7 @@
 module Utils.Coord where
 
 import Data.List.Split (splitOn)
+import Utils.Mod (readInts)
 
 type Point = (Int, Int)
 
@@ -10,7 +11,7 @@ type LineSegment = (Point, Point)
 
 parsePoint :: String -> Point
 parsePoint s =
-  let [x, y] = map read . splitOn "," $ s
+  let [x, y] = readInts s
    in (x, y)
 
 parseLineSegment :: String -> LineSegment

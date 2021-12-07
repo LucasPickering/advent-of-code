@@ -4,7 +4,7 @@ module Day4 where
 
 import Data.List
 import Data.List.Split
-import Utils.Mod (filterBoth, readInputLines)
+import Utils.Mod (filterBoth, readInputLines, readInts)
 
 type BingoInput = [Int]
 
@@ -38,7 +38,7 @@ parseGame :: [String] -> BingoGame
 parseGame [] = error "empty input"
 parseGame [_] = error "empty input"
 parseGame (inputLine : blank : rest) =
-  let input = map read . splitOn "," $ inputLine
+  let input = readInts inputLine
       -- Each of these should be an unparse board
       boards = map parseBoard . splitOn [""] $ rest
    in (input, boards)
