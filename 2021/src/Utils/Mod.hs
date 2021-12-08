@@ -5,6 +5,7 @@ module Utils.Mod where
 import Data.List
 import Data.List.Split (splitOn)
 import qualified Data.Map as Map
+import Data.Tuple (swap)
 
 readInputLines :: IO [String]
 readInputLines = lines <$> getContents
@@ -48,6 +49,7 @@ median nums
 -- | given function before being compared. So this finds the minimum of each
 -- | *output* of the mapper. Returns the original element *and* its winning
 -- | (losing?) score.
+-- TODO use minimumBy with comparing instead
 minBy :: (Ord o, Show o, Show a) => (a -> o) -> [a] -> (a, o)
 minBy f l =
   let answer = foldl' (minByHelper f) Nothing l
@@ -72,3 +74,16 @@ minByHelper f currentMin el =
 -- | Get the summation of all values 1..n. Thanks Gauss!
 summation :: Int -> Int
 summation n = (n * (n + 1)) `div` 2
+
+-- | Convert a 2-list to a 2-tuple
+tuple :: Show a => [a] -> (a, a)
+tuple [first, second] = (first, second)
+tuple other = error $ "Cannot convert list to tuple, must be length 2: " ++ show other
+
+-- | Join a list of digits into a decimal number
+joinDigits :: [Int] -> Int
+joinDigits = foldl' (\acc digit -> acc * 10 + digit) 0
+
+-- | Swap keys and values. Any duplicate values will be lost (last is retained)
+invertMap :: Ord v => Map.Map k v -> Map.Map v k
+invertMap = Map.fromList . map swap . Map.toList
