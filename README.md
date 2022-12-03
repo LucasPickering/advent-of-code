@@ -13,3 +13,11 @@ Still learning Haskell. All days are under the same executable, to pick your day
 ```sh
 cabal run -- 1 2 < inputs/day1.txt
 ```
+
+## 2022
+
+Reverting to Rust cause I just want to get it done this year.
+
+```sh
+cargo run -- 1 2 < inputs/day1.txt
+```

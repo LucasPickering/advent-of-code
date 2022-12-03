@@ -1,0 +1,11 @@
+[package]
+edition = "2021"
+name = "lucaspickering-aoc-2022"
+version = "0.1.0"
+
+[[bin]]
+name = "aoc"
+path = "src/main.rs"
+
+[dependencies]
+clap = {version = "3.2.20", features = ["derive"]}

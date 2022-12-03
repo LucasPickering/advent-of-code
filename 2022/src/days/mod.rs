@@ -1,0 +1,7 @@
+pub mod day1;
+
+/// A day's solvers. &self is needed so it can be a trait object
+pub trait Solver {
+    fn part1(&self, input: String) -> String;
+    fn part2(&self, input: String) -> String;
+}
