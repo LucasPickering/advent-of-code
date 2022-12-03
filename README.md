@@ -19,5 +19,5 @@ cabal run -- 1 2 < inputs/day1.txt
 Reverting to Rust cause I just want to get it done this year.
 
 ```sh
-cargo run -- 1 2 < inputs/day1.txt
+cargo run -- 1 2 # Reads input from input/day1.txt
 ```

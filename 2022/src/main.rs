@@ -1,8 +1,10 @@
 mod days;
+mod util;
 
-use crate::days::{day1::Day1Solver, Solver};
+use crate::days::{day1::Day1Solver, day2::Day2Solver, Solver};
+use anyhow::bail;
 use clap::Parser;
-use std::io::{self, Read};
+use std::fs;
 
 /// Solvers for Advent of Code 2022
 #[derive(Parser, Debug)]
@@ -15,27 +17,31 @@ struct Args {
     part: u8,
 }
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let solver = get_solver(args.day);
 
-    // Read input from stdin (read to EOF)
-    let mut input = String::new();
-    io::stdin().read_to_string(&mut input).unwrap();
+    // Read input from the input path
+    let path = format!("input/day{}.txt", args.day);
+    eprintln!("Reading input from {path}");
+    let input = fs::read_to_string(&path)?;
 
     // Run solver
     let output = match args.part {
-        1 => solver.part1(input),
-        2 => solver.part2(input),
-        part => panic!("Invalid part: {part}"),
+        1 => solver.part1(input)?,
+        2 => solver.part2(input)?,
+        part => bail!("Invalid part: {part}"),
     };
 
     print!("{}", output);
+    Ok(())
 }
 
 fn get_solver(day: u8) -> Box<dyn Solver> {
     match day {
         1 => Box::new(Day1Solver),
+        2 => Box::new(Day2Solver),
+        // Add new days here
         _ => panic!("Invalid day: {day}"),
     }
 }
