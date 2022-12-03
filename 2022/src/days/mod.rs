@@ -1,5 +1,6 @@
 pub mod day1;
 pub mod day2;
+pub mod day3;
 
 /// A day's solvers. &self is needed so it can be a trait object
 pub trait Solver {

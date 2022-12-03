@@ -1,10 +1,16 @@
 mod days;
 mod util;
 
-use crate::days::{day1::Day1Solver, day2::Day2Solver, Solver};
+use crate::days::{
+    day1::Day1Solver, day2::Day2Solver, day3::Day3Solver, Solver,
+};
 use anyhow::bail;
 use clap::Parser;
-use std::fs;
+use std::{
+    fs,
+    io::{self, Read},
+    path::PathBuf,
+};
 
 /// Solvers for Advent of Code 2022
 #[derive(Parser, Debug)]
@@ -15,16 +21,29 @@ struct Args {
 
     /// Number of the part in the problem to solve (1 or 2)
     part: u8,
+
+    /// Path to input file, or - for stdin. Defaults to `input/dayX.txt`, where
+    /// X is the day number
+    input_path: Option<PathBuf>,
 }
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let solver = get_solver(args.day);
 
-    // Read input from the input path
-    let path = format!("input/day{}.txt", args.day);
-    eprintln!("Reading input from {path}");
-    let input = fs::read_to_string(&path)?;
+    // Read input from the input path (or stdin)
+    let input_path = args
+        .input_path
+        .unwrap_or_else(|| format!("input/day{}.txt", args.day).into());
+    let input = if input_path.to_string_lossy() == "-" {
+        eprintln!("Reading input from stdin");
+        let mut input = String::new();
+        io::stdin().read_to_string(&mut input)?;
+        input
+    } else {
+        eprintln!("Reading input from {input_path:?}");
+        fs::read_to_string(&input_path)?
+    };
 
     // Run solver
     let output = match args.part {
@@ -41,6 +60,7 @@ fn get_solver(day: u8) -> Box<dyn Solver> {
     match day {
         1 => Box::new(Day1Solver),
         2 => Box::new(Day2Solver),
+        3 => Box::new(Day3Solver),
         // Add new days here
         _ => panic!("Invalid day: {day}"),
     }
