@@ -1,9 +1,6 @@
 mod days;
 mod util;
 
-use crate::days::{
-    day1::Day1Solver, day2::Day2Solver, day3::Day3Solver, Solver,
-};
 use anyhow::bail;
 use clap::Parser;
 use std::{
@@ -29,7 +26,7 @@ struct Args {
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
-    let solver = get_solver(args.day);
+    let solver = days::get_solver(args.day);
 
     // Read input from the input path (or stdin)
     let input_path = args
@@ -54,14 +51,4 @@ fn main() -> anyhow::Result<()> {
 
     print!("{}", output);
     Ok(())
-}
-
-fn get_solver(day: u8) -> Box<dyn Solver> {
-    match day {
-        1 => Box::new(Day1Solver),
-        2 => Box::new(Day2Solver),
-        3 => Box::new(Day3Solver),
-        // Add new days here
-        _ => panic!("Invalid day: {day}"),
-    }
 }
