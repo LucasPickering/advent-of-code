@@ -47,8 +47,8 @@ fn main() -> anyhow::Result<()> {
 
     // Run solver
     let output = match args.part {
-        1 => solver.part1(input)?,
-        2 => solver.part2(input)?,
+        1 => solver.part1(input),
+        2 => solver.part2(input),
         part => bail!("Invalid part: {part}"),
     };
 

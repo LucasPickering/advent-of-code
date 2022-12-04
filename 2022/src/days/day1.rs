@@ -3,17 +3,17 @@ use crate::days::Solver;
 pub struct Day1Solver;
 
 impl Solver for Day1Solver {
-    fn part1(&self, input: String) -> anyhow::Result<String> {
+    fn part1(&self, input: String) -> String {
         let elf_calories = calc_elf_calories(input);
         let max = elf_calories.into_iter().max().unwrap();
-        Ok(max.to_string())
+        max.to_string()
     }
 
-    fn part2(&self, input: String) -> anyhow::Result<String> {
+    fn part2(&self, input: String) -> String {
         let mut elf_calories = calc_elf_calories(input);
         elf_calories.sort();
         let max3 = elf_calories[elf_calories.len() - 3..].iter().sum::<u32>();
-        Ok(max3.to_string())
+        max3.to_string()
     }
 }
 

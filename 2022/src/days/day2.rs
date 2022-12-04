@@ -5,7 +5,7 @@ use std::str::FromStr;
 pub struct Day2Solver;
 
 impl Solver for Day2Solver {
-    fn part1(&self, input: String) -> anyhow::Result<String> {
+    fn part1(&self, input: String) -> String {
         let games: Vec<(Move, Move)> = input
             .lines()
             .map(|line| {
@@ -15,12 +15,13 @@ impl Solver for Day2Solver {
                 let my_move: Move = columns[1].parse()?;
                 Ok((their_move, my_move))
             })
-            .collect::<anyhow::Result<Vec<_>>>()?;
+            .collect::<anyhow::Result<Vec<_>>>()
+            .unwrap();
         let total_score = games.into_iter().map(calc_score).sum::<u32>();
-        Ok(total_score.to_string())
+        total_score.to_string()
     }
 
-    fn part2(&self, input: String) -> anyhow::Result<String> {
+    fn part2(&self, input: String) -> String {
         let games: Vec<(Move, Move)> = input
             .lines()
             .map(|line| {
@@ -31,9 +32,10 @@ impl Solver for Day2Solver {
                 let my_move = their_move.move_for_outcome(outcome);
                 Ok((their_move, my_move))
             })
-            .collect::<anyhow::Result<Vec<_>>>()?;
+            .collect::<anyhow::Result<Vec<_>>>()
+            .unwrap();
         let total_score = games.into_iter().map(calc_score).sum::<u32>();
-        Ok(total_score.to_string())
+        total_score.to_string()
     }
 }
 

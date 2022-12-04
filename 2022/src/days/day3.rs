@@ -6,7 +6,7 @@ use std::{collections::HashSet, fmt::Debug};
 pub struct Day3Solver;
 
 impl Solver for Day3Solver {
-    fn part1(&self, input: String) -> anyhow::Result<String> {
+    fn part1(&self, input: String) -> String {
         let rucksacks = parse_input(input);
         let duplicates_sum: u32 = rucksacks
             .iter()
@@ -14,10 +14,10 @@ impl Solver for Day3Solver {
             .map(ItemType::priority)
             .map(u32::from)
             .sum();
-        Ok(duplicates_sum.to_string())
+        duplicates_sum.to_string()
     }
 
-    fn part2(&self, input: String) -> anyhow::Result<String> {
+    fn part2(&self, input: String) -> String {
         let rucksacks = parse_input(input);
         let badges_sum: u32 = rucksacks
             .into_iter()
@@ -40,7 +40,7 @@ impl Solver for Day3Solver {
             .map(ItemType::priority)
             .map(u32::from)
             .sum();
-        Ok(badges_sum.to_string())
+        badges_sum.to_string()
     }
 }
 
