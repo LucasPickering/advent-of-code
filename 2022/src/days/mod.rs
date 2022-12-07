@@ -4,10 +4,11 @@ mod day3;
 mod day4;
 mod day5;
 mod day6;
+mod day7;
 
 use crate::days::{
     day1::Day1Solver, day2::Day2Solver, day3::Day3Solver, day4::Day4Solver,
-    day5::Day5Solver, day6::Day6Solver,
+    day5::Day5Solver, day6::Day6Solver, day7::Day7Solver,
 };
 
 /// A day's solvers. &self is needed so it can be a trait object
@@ -24,6 +25,7 @@ pub fn get_solver(day: u8) -> Box<dyn Solver> {
         4 => Box::new(Day4Solver),
         5 => Box::new(Day5Solver),
         6 => Box::new(Day6Solver),
+        7 => Box::new(Day7Solver),
         // Add new days here
         _ => panic!("Invalid day: {day}"),
     }
