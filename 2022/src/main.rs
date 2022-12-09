@@ -3,6 +3,7 @@ mod util;
 
 use anyhow::bail;
 use clap::Parser;
+use env_logger::{Env, Target};
 use std::{
     fs,
     io::{self, Read},
@@ -25,6 +26,15 @@ struct Args {
 }
 
 fn main() -> anyhow::Result<()> {
+    env_logger::Builder::from_env(Env::default().default_filter_or("info"))
+        // Logging should look like regular print output
+        .format_level(false)
+        .format_timestamp(None)
+        .format_indent(None)
+        .format_module_path(false)
+        .format_target(false)
+        .target(Target::Stdout)
+        .init();
     let args = Args::parse();
     let solver = days::get_solver(args.day);
 

@@ -1,4 +1,4 @@
-use crate::days::Solver;
+use crate::{days::Solver, util::Direction};
 use std::convert;
 
 pub struct Day8Solver;
@@ -31,14 +31,6 @@ struct TreeGrid {
     /// A flattened 2D vector. Column-major (same order as the input)
     trees: Vec<Tree>,
     width: usize,
-}
-
-#[derive(Copy, Clone, Debug)]
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
 }
 
 impl TreeGrid {
@@ -126,16 +118,5 @@ impl TreeGrid {
             .iter()
             .enumerate()
             .map(|(i, tree)| ((i % self.width, i / self.width), *tree))
-    }
-}
-
-impl Direction {
-    fn all() -> [Self; 4] {
-        [
-            Direction::Up,
-            Direction::Down,
-            Direction::Left,
-            Direction::Right,
-        ]
     }
 }
