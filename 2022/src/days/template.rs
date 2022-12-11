@@ -7,7 +7,7 @@ impl Solver for DayXSolver {
         todo!()
     }
 
-    fn part2(&self, input: String) -> String {
+    fn part2(&self, _input: String) -> String {
         todo!()
     }
 }

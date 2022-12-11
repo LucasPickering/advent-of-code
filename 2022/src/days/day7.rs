@@ -1,4 +1,4 @@
-use crate::days::Solver;
+use crate::{days::Solver, util::MatchExt};
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::{fmt::Display, str::Lines};
@@ -127,7 +127,7 @@ impl Directory {
             // Add a file to children
             if let Some(caps) = FILE_REGEX.captures(line) {
                 let name = caps.get(2).unwrap().as_str();
-                let size = caps.get(1).unwrap().as_str().parse().unwrap();
+                let size = caps.get(1).unwrap().parse_unwrap();
 
                 self.children.push(FsObject::File(File {
                     name: name.into(),

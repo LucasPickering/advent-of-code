@@ -1,6 +1,8 @@
 use anyhow::anyhow;
 use derive_more::{Add, AddAssign, Display, Sub, SubAssign};
+use regex::{Captures, Match};
 use std::{
+    fmt::Debug,
     ops::{Add, AddAssign},
     str::FromStr,
 };
@@ -109,5 +111,44 @@ impl FromStr for Direction {
             "R" => Ok(Self::Right),
             other => Err(anyhow!("Unknown direction: {}", other)),
         }
+    }
+}
+
+/// Extension trait for [regex::Captures]
+pub trait CapturesExt {
+    /// Get a numbered capture group and unwrap the output
+    fn get_unwrap(&self, i: usize) -> Match<'_>;
+
+    /// Get a named capture group and unwrap the output
+    fn name_unwrap(&self, name: &str) -> Match<'_>;
+}
+
+impl CapturesExt for Captures<'_> {
+    fn get_unwrap(&self, i: usize) -> Match<'_> {
+        self.get(i).unwrap()
+    }
+
+    fn name_unwrap(&self, name: &str) -> Match<'_> {
+        self.name(name).unwrap()
+    }
+}
+
+/// Extension trait for [regex::Match]
+pub trait MatchExt {
+    /// Parse the matched value into some parseable type, then unwrap that
+    /// output
+    fn parse_unwrap<T>(&self) -> T
+    where
+        T: FromStr,
+        <T as FromStr>::Err: Debug;
+}
+
+impl MatchExt for Match<'_> {
+    fn parse_unwrap<T>(&self) -> T
+    where
+        T: FromStr,
+        <T as FromStr>::Err: Debug,
+    {
+        self.as_str().parse().unwrap()
     }
 }
