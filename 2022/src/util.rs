@@ -2,6 +2,7 @@ use anyhow::anyhow;
 use derive_more::{Add, AddAssign, Display, Sub, SubAssign};
 use regex::{Captures, Match};
 use std::{
+    cmp,
     fmt::Debug,
     ops::{Add, AddAssign},
     str::FromStr,
@@ -10,6 +11,15 @@ use std::{
 /// Split a string on spaces
 pub fn words(input: &str) -> Vec<&str> {
     input.split(' ').collect::<Vec<_>>()
+}
+
+/// Get the `(min, max)` of a pair
+pub fn min_max<T: Ord>(a: T, b: T) -> (T, T) {
+    if a < b {
+        (a, b)
+    } else {
+        (b, a)
+    }
 }
 
 /// 2D position
@@ -80,6 +90,21 @@ impl AddAssign<Direction> for Position {
     }
 }
 
+impl FromStr for Position {
+    type Err = anyhow::Error;
+
+    /// Parse a string like x,y
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.split_once(',') {
+            Some((x, y)) => Ok(Self {
+                x: x.parse()?,
+                y: y.parse()?,
+            }),
+            None => Err(anyhow!("Invalid position string: {s}")),
+        }
+    }
+}
+
 /// 2D direction
 #[derive(Copy, Clone, Debug)]
 pub enum Direction {
@@ -111,6 +136,29 @@ impl FromStr for Direction {
             "R" => Ok(Self::Right),
             other => Err(anyhow!("Unknown direction: {}", other)),
         }
+    }
+}
+
+/// Extension trait for [std::iter::Iterator], supplying functionality related
+/// to positions.
+pub trait PositionIterator {
+    /// Get the minimum and maximum x and y values that appear in a series of
+    /// positions. The bounds are in the order of `(min_x, min_y, max_x,
+    /// max_y)`. Returns `None` iff the iterator is empty.
+    fn bounds(self) -> Option<(isize, isize, isize, isize)>;
+}
+
+impl<I: Iterator<Item = Position>> PositionIterator for I {
+    fn bounds(self) -> Option<(isize, isize, isize, isize)> {
+        self.fold(None, |acc, position| match acc {
+            Some((min_x, min_y, max_x, max_y)) => Some((
+                cmp::min(min_x, position.x),
+                cmp::min(min_y, position.y),
+                cmp::max(max_x, position.x),
+                cmp::max(max_y, position.y),
+            )),
+            None => Some((position.x, position.y, position.x, position.y)),
+        })
     }
 }
 

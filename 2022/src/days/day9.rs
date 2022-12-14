@@ -1,9 +1,9 @@
 use crate::{
     days::Solver,
-    util::{words, Direction, Position},
+    util::{words, Direction, Position, PositionIterator},
 };
 use log::{debug, trace};
-use std::{cmp, collections::HashSet, fmt::Display, iter};
+use std::{collections::HashSet, fmt::Display, iter};
 
 pub struct Day9Solver;
 
@@ -148,14 +148,9 @@ impl Display for State {
         let (min_x, min_y, max_x, max_y) = self
             .all_ropes()
             .flat_map(|rope| &rope.knots)
-            .fold((0, 0, 0, 0), |(min_x, min_y, max_x, max_y), position| {
-                (
-                    cmp::min(min_x, position.x),
-                    cmp::min(min_y, position.y),
-                    cmp::max(max_x, position.x),
-                    cmp::max(max_y, position.y),
-                )
-            });
+            .copied()
+            .bounds()
+            .unwrap();
         let tail_history = self
             .history
             .iter()
