@@ -1,16 +1,13 @@
-use crate::{
-    days::Solver,
-    util::{Direction, Position},
-};
+use crate::util::{Direction, Position};
 use log::{debug, trace};
 use std::{
     collections::{HashMap, HashSet},
     fmt::Display,
 };
 
-pub struct Day12Solver;
+pub struct Solver;
 
-impl Solver for Day12Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let height_map = parse_input(&input);
         let searcher = Part1Searcher {

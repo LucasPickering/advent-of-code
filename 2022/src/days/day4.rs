@@ -1,10 +1,9 @@
-use crate::days::Solver;
 use anyhow::{anyhow, Context};
 use std::ops::RangeInclusive;
 
-pub struct Day4Solver;
+pub struct Solver;
 
-impl Solver for Day4Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let range_pairs = parse_input(input);
         range_pairs

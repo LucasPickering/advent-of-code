@@ -1,8 +1,6 @@
-use crate::days::Solver;
+pub struct Solver;
 
-pub struct DayXSolver;
-
-impl Solver for DayXSolver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         todo!()
     }

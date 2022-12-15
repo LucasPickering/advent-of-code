@@ -1,10 +1,10 @@
-use crate::{days::Solver, util};
+use crate::util;
 use anyhow::anyhow;
 use std::str::FromStr;
 
-pub struct Day2Solver;
+pub struct Solver;
 
-impl Solver for Day2Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let games: Vec<(Move, Move)> = input
             .lines()

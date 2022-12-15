@@ -1,11 +1,10 @@
-use crate::days::Solver;
 use derive_more::{Display, From, FromStr};
 use itertools::Itertools;
 use std::{collections::HashSet, fmt::Debug};
 
-pub struct Day3Solver;
+pub struct Solver;
 
-impl Solver for Day3Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let rucksacks = parse_input(input);
         let duplicates_sum: u32 = rucksacks

@@ -1,12 +1,11 @@
-use crate::days::Solver;
 use itertools::Itertools;
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::{collections::HashMap, fmt::Display};
 
-pub struct Day5Solver;
+pub struct Solver;
 
-impl Solver for Day5Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let (mut stacks, moves) = parse_input(&input);
         for move_ in moves {

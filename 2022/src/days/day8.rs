@@ -1,9 +1,9 @@
-use crate::{days::Solver, util::Direction};
+use crate::util::Direction;
 use std::convert;
 
-pub struct Day8Solver;
+pub struct Solver;
 
-impl Solver for Day8Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let grid = TreeGrid::parse(&input);
         let num_visible = grid

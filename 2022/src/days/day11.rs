@@ -1,7 +1,4 @@
-use crate::{
-    days::Solver,
-    util::{CapturesExt, MatchExt},
-};
+use crate::util::{CapturesExt, MatchExt};
 use anyhow::anyhow;
 use derive_more::Display;
 use itertools::Itertools;
@@ -22,9 +19,9 @@ lazy_static! {
     .unwrap();
 }
 
-pub struct Day11Solver;
+pub struct Solver;
 
-impl Solver for Day11Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let monkeys = parse_input(&input);
         let mut state = State::new(monkeys, true);

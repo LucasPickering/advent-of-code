@@ -1,4 +1,4 @@
-use crate::{days::Solver, util::words};
+use crate::util::words;
 use itertools::Itertools;
 use log::info;
 use std::{collections::HashMap, fmt::Display, ops::RangeInclusive};
@@ -6,9 +6,9 @@ use std::{collections::HashMap, fmt::Display, ops::RangeInclusive};
 const SCREEN_WIDTH: usize = 40;
 const CHECKPOINTS: &[usize] = &[20, 60, 100, 140, 180, 220];
 
-pub struct Day10Solver;
+pub struct Solver;
 
-impl Solver for Day10Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let instructions = parse_input(&input);
         let mut state_machine = StateMachine::default();

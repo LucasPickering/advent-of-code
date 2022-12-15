@@ -1,4 +1,3 @@
-use crate::days::Solver;
 use itertools::Itertools;
 use log::{debug, trace};
 use nom::{
@@ -11,9 +10,9 @@ use nom::{
 };
 use std::{fmt::Display, iter};
 
-pub struct Day13Solver;
+pub struct Solver;
 
-impl Solver for Day13Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let expressions = parse_input(&input);
         // Pair the expressions up

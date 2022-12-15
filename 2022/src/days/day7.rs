@@ -1,4 +1,4 @@
-use crate::{days::Solver, util::MatchExt};
+use crate::util::MatchExt;
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::{fmt::Display, str::Lines};
@@ -6,9 +6,9 @@ use std::{fmt::Display, str::Lines};
 const DISK_SIZE: usize = 70000000;
 const UPDATE_SIZE: usize = 30000000;
 
-pub struct Day7Solver;
+pub struct Solver;
 
-impl Solver for Day7Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let root_dir = Directory::parse_root(&input);
         println!("{}", root_dir);

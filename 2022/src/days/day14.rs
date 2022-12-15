@@ -1,15 +1,12 @@
-use crate::{
-    days::Solver,
-    util::{self, Direction, Position, PositionIterator},
-};
+use crate::util::{self, Direction, Position, PositionIterator};
 use derive_more::Display;
 use itertools::Itertools;
 use log::{debug, info};
 use std::{collections::HashMap, fmt::Display};
 
-pub struct Day14Solver;
+pub struct Solver;
 
-impl Solver for Day14Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let mut cave = parse_input(&input);
         info!("{cave}");

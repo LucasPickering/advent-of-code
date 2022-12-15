@@ -1,9 +1,8 @@
-use crate::days::Solver;
 use std::collections::HashSet;
 
-pub struct Day6Solver;
+pub struct Solver;
 
-impl Solver for Day6Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         find_distinct(&input, 4).to_string()
     }

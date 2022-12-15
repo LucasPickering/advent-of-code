@@ -1,13 +1,10 @@
-use crate::{
-    days::Solver,
-    util::{words, Direction, Position, PositionIterator},
-};
+use crate::util::{words, Direction, Position, PositionIterator};
 use log::{debug, trace};
 use std::{collections::HashSet, fmt::Display, iter};
 
-pub struct Day9Solver;
+pub struct Solver;
 
-impl Solver for Day9Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let actions = parse_input(&input);
         let mut state = State::with_length(2);

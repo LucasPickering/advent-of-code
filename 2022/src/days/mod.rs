@@ -13,13 +13,6 @@ mod day7;
 mod day8;
 mod day9;
 
-use crate::days::{
-    day1::Day1Solver, day10::Day10Solver, day11::Day11Solver,
-    day12::Day12Solver, day13::Day13Solver, day14::Day14Solver,
-    day2::Day2Solver, day3::Day3Solver, day4::Day4Solver, day5::Day5Solver,
-    day6::Day6Solver, day7::Day7Solver, day8::Day8Solver, day9::Day9Solver,
-};
-
 /// A day's solvers. &self is needed so it can be a trait object
 pub trait Solver {
     fn part1(&self, input: String) -> String;
@@ -28,20 +21,20 @@ pub trait Solver {
 
 pub fn get_solver(day: u8) -> Box<dyn Solver> {
     match day {
-        1 => Box::new(Day1Solver),
-        2 => Box::new(Day2Solver),
-        3 => Box::new(Day3Solver),
-        4 => Box::new(Day4Solver),
-        5 => Box::new(Day5Solver),
-        6 => Box::new(Day6Solver),
-        7 => Box::new(Day7Solver),
-        8 => Box::new(Day8Solver),
-        9 => Box::new(Day9Solver),
-        10 => Box::new(Day10Solver),
-        11 => Box::new(Day11Solver),
-        12 => Box::new(Day12Solver),
-        13 => Box::new(Day13Solver),
-        14 => Box::new(Day14Solver),
+        1 => Box::new(day1::Solver),
+        2 => Box::new(day2::Solver),
+        3 => Box::new(day3::Solver),
+        4 => Box::new(day4::Solver),
+        5 => Box::new(day5::Solver),
+        6 => Box::new(day6::Solver),
+        7 => Box::new(day7::Solver),
+        8 => Box::new(day8::Solver),
+        9 => Box::new(day9::Solver),
+        10 => Box::new(day10::Solver),
+        11 => Box::new(day11::Solver),
+        12 => Box::new(day12::Solver),
+        13 => Box::new(day13::Solver),
+        14 => Box::new(day14::Solver),
         // Add new days here
         _ => panic!("Invalid day: {day}"),
     }

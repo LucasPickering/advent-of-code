@@ -1,8 +1,6 @@
-use crate::days::Solver;
+pub struct Solver;
 
-pub struct Day1Solver;
-
-impl Solver for Day1Solver {
+impl super::Solver for Solver {
     fn part1(&self, input: String) -> String {
         let elf_calories = calc_elf_calories(input);
         let max = elf_calories.into_iter().max().unwrap();
