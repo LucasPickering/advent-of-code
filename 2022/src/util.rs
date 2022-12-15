@@ -1,6 +1,7 @@
-use anyhow::anyhow;
+use anyhow::{anyhow, bail};
 use derive_more::{Add, AddAssign, Display, Sub, SubAssign};
-use regex::{Captures, Match};
+use lazy_static::lazy_static;
+use regex::{Captures, Match, Regex};
 use std::{
     cmp,
     fmt::Debug,
@@ -51,6 +52,14 @@ impl Position {
             y: self.y.abs(),
         }
     }
+
+    /// Get the Manhattan distance between two points. The distance is always
+    /// positive, but returned as an `isize` to make interop with other position
+    /// values easier.
+    pub fn manhattan_distance(self, other: Self) -> isize {
+        let diff = (self - other).abs();
+        diff.x + diff.y
+    }
 }
 
 impl From<(isize, isize)> for Position {
@@ -93,15 +102,28 @@ impl AddAssign<Direction> for Position {
 impl FromStr for Position {
     type Err = anyhow::Error;
 
-    /// Parse a string like x,y
+    /// Parse a position. Supports the following formats:
+    /// - <x>,<y>
+    /// - x=<x>, y=<y>
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.split_once(',') {
-            Some((x, y)) => Ok(Self {
-                x: x.parse()?,
-                y: y.parse()?,
-            }),
-            None => Err(anyhow!("Invalid position string: {s}")),
+        lazy_static! {
+            static ref SIMPLE_PAIR: Regex =
+                Regex::new(r"^(?P<x>-?\d+),\s*(?P<y>-?\d+)$").unwrap();
+            static ref KEYED_PAIR: Regex =
+                Regex::new(r"^x=(?P<x>-?\d+),\s*y=(?P<y>-?\d+)$").unwrap();
         }
+
+        let caps = if let Some(caps) = SIMPLE_PAIR.captures(s) {
+            caps
+        } else if let Some(caps) = KEYED_PAIR.captures(s) {
+            caps
+        } else {
+            bail!("Invalid position string: {s}")
+        };
+        Ok(Self {
+            x: caps.name_unwrap("x").as_str().parse()?,
+            y: caps.name_unwrap("y").as_str().parse()?,
+        })
     }
 }
 
