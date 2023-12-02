@@ -1,3 +1,6 @@
+#![feature(iterator_try_collect)]
+#![feature(lazy_cell)]
+
 mod days;
 
 use anyhow::bail;
@@ -58,6 +61,6 @@ fn main() -> anyhow::Result<()> {
         part => bail!("Invalid part: {part}"),
     };
 
-    print!("{}", output);
+    println!("{}", output);
     Ok(())
 }
