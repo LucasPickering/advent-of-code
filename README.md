@@ -21,3 +21,11 @@ Reverting to Rust cause I just want to get it done this year.
 ```sh
 cargo run -- 1 2 # Reads input from input/day1.txt
 ```
+
+## 2023
+
+Rust again!
+
+```sh
+cargo run -- 1 2 # Day 1, part 2, reads input from input/day1.txt
+```

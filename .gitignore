@@ -6,3 +6,4 @@ dist-newstyle/
 target/
 .DS_Store
 example.txt
+.vscode/
