@@ -1,5 +1,8 @@
 mod days;
+mod tui;
+mod util;
 
+use crate::tui::{Level, Tui};
 use anyhow::bail;
 use clap::Parser;
 use env_logger::{Env, Target};
@@ -22,6 +25,10 @@ struct Args {
     /// Path to input file, or - for stdin. Defaults to `input/dayX.txt`, where
     /// X is the day number
     input_path: Option<PathBuf>,
+
+    /// Enable interactive mode
+    #[clap(long, short, default_value_t = Level::None)]
+    interactive: Level,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -51,7 +58,8 @@ fn main() -> anyhow::Result<()> {
     };
 
     // Run solver
-    let solver = days::get_solver(args.day, input);
+    let tui = Tui::new(args.interactive);
+    let solver = days::get_solver(args.day, input, tui);
     let output = match args.part {
         1 => solver.part1(),
         2 => solver.part2(),

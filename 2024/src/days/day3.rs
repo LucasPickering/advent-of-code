@@ -1,3 +1,4 @@
+use crate::tui::Tui;
 use regex::Regex;
 use std::sync::LazyLock;
 
@@ -6,7 +7,7 @@ pub struct Solver {
 }
 
 impl super::Solver for Solver {
-    fn new(input: String) -> Self {
+    fn new(input: String, _: Tui) -> Self {
         static REGEX: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"(mul\((\d+),(\d+)\))|(do\(\))|(don't\(\))"#).unwrap()
         });
@@ -48,17 +49,6 @@ impl super::Solver for Solver {
         );
         sum.to_string()
     }
-}
-
-fn parse_input_p1(input: &str) -> impl '_ + Iterator<Item = (i32, i32)> {
-    static REGEX: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"mul\((\d+),(\d+)\)"#).unwrap());
-    REGEX.captures_iter(input).map(|cap| {
-        (
-            cap[1].parse::<i32>().unwrap(),
-            cap[2].parse::<i32>().unwrap(),
-        )
-    })
 }
 
 enum Instruction {

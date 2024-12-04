@@ -1,3 +1,4 @@
+use crate::tui::Tui;
 use std::collections::HashMap;
 
 pub struct Solver {
@@ -6,7 +7,7 @@ pub struct Solver {
 }
 
 impl super::Solver for Solver {
-    fn new(input: String) -> Self {
+    fn new(input: String, _: Tui) -> Self {
         let (list1, list2) = input
             .lines()
             .map(|line| {

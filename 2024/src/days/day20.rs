@@ -1,7 +1,9 @@
+use crate::tui::Tui;
+
 pub struct Solver;
 
 impl super::Solver for Solver {
-    fn new(_input: String) -> Self {
+    fn new(_input: String, _: Tui) -> Self {
         todo!()
     }
 

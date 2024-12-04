@@ -1,3 +1,4 @@
+use crate::tui::Tui;
 use itertools::Itertools;
 
 pub struct Solver {
@@ -7,7 +8,7 @@ pub struct Solver {
 type Report = Vec<i32>;
 
 impl super::Solver for Solver {
-    fn new(input: String) -> Self {
+    fn new(input: String, _: Tui) -> Self {
         let reports = input
             .lines()
             .map(|line| {
