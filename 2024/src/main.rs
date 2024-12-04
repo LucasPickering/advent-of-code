@@ -35,7 +35,6 @@ fn main() -> anyhow::Result<()> {
         .target(Target::Stdout)
         .init();
     let args = Args::parse();
-    let solver = days::get_solver(args.day);
 
     // Read input from the input path (or stdin)
     let input_path = args
@@ -52,9 +51,10 @@ fn main() -> anyhow::Result<()> {
     };
 
     // Run solver
+    let solver = days::get_solver(args.day, input);
     let output = match args.part {
-        1 => solver.part1(input),
-        2 => solver.part2(input),
+        1 => solver.part1(),
+        2 => solver.part2(),
         part => bail!("Invalid part: {part}"),
     };
 

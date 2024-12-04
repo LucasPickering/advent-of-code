@@ -24,39 +24,47 @@ mod day7;
 mod day8;
 mod day9;
 
-/// A day's solvers. &self is needed so it can be a trait object
+/// A day's solvers
 pub trait Solver {
-    fn part1(&self, _input: String) -> String;
-    fn part2(&self, _input: String) -> String;
+    /// Parse input and initialize the solver
+    fn new(input: String) -> Self
+    where
+        Self: Sized;
+
+    /// Solve part 1
+    fn part1(self: Box<Self>) -> String;
+
+    /// Solve part 2
+    fn part2(self: Box<Self>) -> String;
 }
 
-pub fn get_solver(day: u8) -> Box<dyn Solver> {
+pub fn get_solver(day: u8, input: String) -> Box<dyn Solver> {
     match day {
-        1 => Box::new(day1::Solver),
-        2 => Box::new(day2::Solver),
-        3 => Box::new(day3::Solver),
-        4 => Box::new(day4::Solver),
-        5 => Box::new(day5::Solver),
-        6 => Box::new(day6::Solver),
-        7 => Box::new(day7::Solver),
-        8 => Box::new(day8::Solver),
-        9 => Box::new(day9::Solver),
-        10 => Box::new(day10::Solver),
-        11 => Box::new(day11::Solver),
-        12 => Box::new(day12::Solver),
-        13 => Box::new(day13::Solver),
-        14 => Box::new(day14::Solver),
-        15 => Box::new(day15::Solver),
-        16 => Box::new(day16::Solver),
-        17 => Box::new(day17::Solver),
-        18 => Box::new(day18::Solver),
-        19 => Box::new(day19::Solver),
-        20 => Box::new(day20::Solver),
-        21 => Box::new(day21::Solver),
-        22 => Box::new(day22::Solver),
-        23 => Box::new(day23::Solver),
-        24 => Box::new(day24::Solver),
-        25 => Box::new(day25::Solver),
+        1 => Box::new(day1::Solver::new(input)),
+        2 => Box::new(day2::Solver::new(input)),
+        3 => Box::new(day3::Solver::new(input)),
+        4 => Box::new(day4::Solver::new(input)),
+        5 => Box::new(day5::Solver::new(input)),
+        6 => Box::new(day6::Solver::new(input)),
+        7 => Box::new(day7::Solver::new(input)),
+        8 => Box::new(day8::Solver::new(input)),
+        9 => Box::new(day9::Solver::new(input)),
+        10 => Box::new(day10::Solver::new(input)),
+        11 => Box::new(day11::Solver::new(input)),
+        12 => Box::new(day12::Solver::new(input)),
+        13 => Box::new(day13::Solver::new(input)),
+        14 => Box::new(day14::Solver::new(input)),
+        15 => Box::new(day15::Solver::new(input)),
+        16 => Box::new(day16::Solver::new(input)),
+        17 => Box::new(day17::Solver::new(input)),
+        18 => Box::new(day18::Solver::new(input)),
+        19 => Box::new(day19::Solver::new(input)),
+        20 => Box::new(day20::Solver::new(input)),
+        21 => Box::new(day21::Solver::new(input)),
+        22 => Box::new(day22::Solver::new(input)),
+        23 => Box::new(day23::Solver::new(input)),
+        24 => Box::new(day24::Solver::new(input)),
+        25 => Box::new(day25::Solver::new(input)),
         // Add new days here
         _ => panic!("Invalid day: {day}"),
     }

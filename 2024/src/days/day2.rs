@@ -1,36 +1,41 @@
 use itertools::Itertools;
 
-pub struct Solver;
+pub struct Solver {
+    reports: Vec<Report>,
+}
 
 type Report = Vec<i32>;
 
 impl super::Solver for Solver {
-    fn part1(&self, input: String) -> String {
-        let reports = parse_input(&input);
-        let num_safe = reports
+    fn new(input: String) -> Self {
+        let reports = input
+            .lines()
+            .map(|line| {
+                line.split(" ")
+                    .map(|value| value.parse::<i32>().expect("Invalid value"))
+                    .collect()
+            })
+            .collect();
+        Self { reports }
+    }
+
+    fn part1(self: Box<Self>) -> String {
+        let num_safe = self
+            .reports
             .iter()
             .filter(|report| is_safe_p1(report.iter().copied()))
             .count();
         num_safe.to_string()
     }
 
-    fn part2(&self, input: String) -> String {
-        let reports = parse_input(&input);
-        let num_safe =
-            reports.iter().filter(|report| is_safe_p2(report)).count();
+    fn part2(self: Box<Self>) -> String {
+        let num_safe = self
+            .reports
+            .iter()
+            .filter(|report| is_safe_p2(report))
+            .count();
         num_safe.to_string()
     }
-}
-
-fn parse_input(input: &str) -> Vec<Report> {
-    input
-        .lines()
-        .map(|line| {
-            line.split(" ")
-                .map(|value| value.parse::<i32>().expect("Invalid value"))
-                .collect()
-        })
-        .collect()
 }
 
 fn is_safe_p1(report: impl Iterator<Item = i32>) -> bool {

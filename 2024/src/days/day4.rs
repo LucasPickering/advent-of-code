@@ -1,11 +1,15 @@
 pub struct Solver;
 
 impl super::Solver for Solver {
-    fn part1(&self, _input: String) -> String {
+    fn new(_input: String) -> Self {
         todo!()
     }
 
-    fn part2(&self, _input: String) -> String {
+    fn part1(self: Box<Self>) -> String {
+        todo!()
+    }
+
+    fn part2(self: Box<Self>) -> String {
         todo!()
     }
 }
