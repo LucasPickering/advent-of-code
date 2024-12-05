@@ -102,6 +102,14 @@ impl<T> Grid<T> {
         (0..height).flat_map(move |y| (0..width).map(move |x| Point2 { x, y }))
     }
 
+    pub fn get(&self, point: Point2<usize>) -> Option<&T> {
+        if self.is_valid(point) {
+            Some(&self[point])
+        } else {
+            None
+        }
+    }
+
     pub fn is_valid(&self, point: Point2<usize>) -> bool {
         point.x < self.width && point.y < self.height
     }

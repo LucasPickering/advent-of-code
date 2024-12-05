@@ -2,6 +2,7 @@ use crate::{
     tui::{GridWidget, Level, Tui},
     util::{Grid, Point2, Vector2},
 };
+use std::ops::Add;
 
 pub struct Solver {
     grid: Grid<Char>,
@@ -29,7 +30,11 @@ impl super::Solver for Solver {
     }
 
     fn part2(self: Box<Self>) -> String {
-        todo!()
+        self.grid
+            .points()
+            .filter(|point| self.is_xmas_p2(*point).unwrap_or(false))
+            .count()
+            .to_string()
     }
 }
 
@@ -84,6 +89,30 @@ impl Solver {
             },
         );
         true
+    }
+
+    fn is_xmas_p2(&self, point: Point2<usize>) -> Option<bool> {
+        if self.grid[point] == Char::A {
+            // This is a candidate for an X-MAS
+            let up_left =
+                *self.grid.get(point.add(Vector2 { x: -1, y: -1 })?)?;
+            let up_right =
+                *self.grid.get(point.add(Vector2 { x: 1, y: -1 })?)?;
+            let down_left =
+                *self.grid.get(point.add(Vector2 { x: -1, y: 1 })?)?;
+            let down_right =
+                *self.grid.get(point.add(Vector2 { x: 1, y: 1 })?)?;
+            fn is_x_pair(char1: Char, char2: Char) -> bool {
+                (char1 == Char::M && char2 == Char::S)
+                    || (char1 == Char::S && char2 == Char::M)
+            }
+            Some(
+                is_x_pair(up_left, down_right)
+                    && is_x_pair(up_right, down_left),
+            )
+        } else {
+            None
+        }
     }
 }
 
