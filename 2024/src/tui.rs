@@ -2,6 +2,10 @@ mod widgets;
 
 pub use widgets::GridWidget;
 
+use crate::{
+    tui::widgets::{PanState, PanWidget},
+    util::Direction,
+};
 use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use ratatui::{
     prelude::{CrosstermBackend, Terminal},
@@ -15,6 +19,7 @@ pub struct Tui {
     terminal: Option<Term>,
     level: Level,
     to_skip: usize,
+    pan_state: PanState,
 }
 
 impl Tui {
@@ -27,6 +32,7 @@ impl Tui {
         Self {
             terminal,
             level,
+            pan_state: PanState::default(),
             to_skip: 0,
         }
     }
@@ -42,11 +48,18 @@ impl Tui {
             return;
         }
 
-        terminal
-            .draw(|frame| frame.render_widget(widget, frame.area()))
-            .expect("Error drawing TUI");
+        self.pan_state.draw(widget);
 
         loop {
+            terminal
+                .draw(|frame| {
+                    frame.render_stateful_widget(
+                        PanWidget,
+                        frame.area(),
+                        &mut self.pan_state,
+                    )
+                })
+                .expect("Error drawing TUI");
             if let Event::Key(KeyEvent {
                 kind: KeyEventKind::Press,
                 code,
@@ -66,6 +79,14 @@ impl Tui {
                         self.quit();
                         return;
                     }
+                    KeyCode::Up => self.pan_state.pan(Direction::Up, 1),
+                    KeyCode::Down => self.pan_state.pan(Direction::Down, 1),
+                    KeyCode::Left => self.pan_state.pan(Direction::Left, 1),
+                    KeyCode::Right => self.pan_state.pan(Direction::Right, 1),
+                    KeyCode::PageUp => self.pan_state.pan(Direction::Up, 20),
+                    KeyCode::PageDown => {
+                        self.pan_state.pan(Direction::Down, 20)
+                    }
                     // Carry on with our work
                     KeyCode::Char(' ') => return,
                     _ => {}
@@ -82,7 +103,9 @@ impl Tui {
 
 impl Drop for Tui {
     fn drop(&mut self) {
-        ratatui::restore();
+        if self.terminal.is_some() {
+            ratatui::restore();
+        }
     }
 }
 

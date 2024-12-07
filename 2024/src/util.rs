@@ -2,7 +2,7 @@ use std::ops::{Add, Index, IndexMut};
 
 #[derive(Copy, Clone, Debug, derive_more::Display, Eq, Hash, PartialEq)]
 #[display("({x},{y})")]
-pub struct Point2<T> {
+pub struct Point2<T = usize> {
     pub x: T,
     pub y: T,
 }
@@ -47,6 +47,26 @@ impl Add<Vector2> for Point2<usize> {
             x: (x + rhs.x).try_into().ok()?,
             y: (y + rhs.y).try_into().ok()?,
         })
+    }
+}
+
+#[derive(Copy, Clone, Debug, derive_more::Display, Eq, Hash, PartialEq)]
+pub enum Direction {
+    Up,
+    Right,
+    Down,
+    Left,
+}
+
+impl Direction {
+    /// Get the next direction clockwise
+    pub fn clockwise(&self) -> Direction {
+        match self {
+            Self::Up => Self::Right,
+            Self::Right => Self::Down,
+            Self::Down => Self::Left,
+            Self::Left => Self::Up,
+        }
     }
 }
 
