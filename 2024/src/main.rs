@@ -2,8 +2,10 @@ mod days;
 mod tui;
 mod util;
 
-use crate::tui::{Level, Tui};
-use anyhow::bail;
+use crate::{
+    days::Part,
+    tui::{Level, Tui},
+};
 use clap::Parser;
 use env_logger::{Env, Target};
 use std::{
@@ -20,7 +22,7 @@ struct Args {
     day: u8,
 
     /// Number of the part in the problem to solve (1 or 2)
-    part: u8,
+    part: Part,
 
     /// Path to input file, or - for stdin. Defaults to `input/dayX.txt`, where
     /// X is the day number
@@ -60,10 +62,10 @@ fn main() -> anyhow::Result<()> {
     // Run solver
     let tui = Tui::new(args.interactive);
     let solver = days::get_solver(args.day, input, tui);
+    Part::set(args.part); // Store part number globally
     let output = match args.part {
-        1 => solver.part1(),
-        2 => solver.part2(),
-        part => bail!("Invalid part: {part}"),
+        Part::Part1 => solver.part1(),
+        Part::Part2 => solver.part2(),
     };
 
     println!("{}", output);

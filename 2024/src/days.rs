@@ -1,4 +1,6 @@
 use crate::tui::Tui;
+use anyhow::anyhow;
+use std::{str::FromStr, sync::OnceLock};
 
 mod day1;
 mod day10;
@@ -25,6 +27,43 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
+
+/// Store which problem we're solving globally, for dispatch
+static PART: OnceLock<Part> = OnceLock::new();
+
+/// Which problem part are we operating one? Sometimes useful for dispatch
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub enum Part {
+    Part1,
+    Part2,
+}
+
+impl Part {
+    pub fn set(part: Self) {
+        PART.set(part).expect("problem part already set")
+    }
+
+    pub fn get() -> Self {
+        *PART.get().expect("problem part not set")
+    }
+
+    /// Is this part 2?
+    pub fn is2(self) -> bool {
+        self == Self::Part2
+    }
+}
+
+impl FromStr for Part {
+    type Err = anyhow::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "1" => Ok(Self::Part1),
+            "2" => Ok(Self::Part2),
+            _ => Err(anyhow!("Invalid part: {s}")),
+        }
+    }
+}
 
 /// A day's solvers
 pub trait Solver {
