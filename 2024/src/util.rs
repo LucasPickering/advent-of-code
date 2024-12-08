@@ -1,10 +1,57 @@
-use std::ops::{Add, Index, IndexMut};
+use std::ops::{Add, Index, IndexMut, Sub};
 
 #[derive(Copy, Clone, Debug, derive_more::Display, Eq, Hash, PartialEq)]
 #[display("({x},{y})")]
 pub struct Point2<T = usize> {
     pub x: T,
     pub y: T,
+}
+
+impl Point2 {
+    /// Get the offset between the two points, i.e. `other - self`
+    pub fn displacement(self, other: Point2) -> Vector2 {
+        let p1: Point2<i64> = self.into();
+        let p2: Point2<i64> = other.into();
+        Vector2 {
+            x: p2.x - p1.x,
+            y: p2.y - p1.y,
+        }
+    }
+}
+
+/// If the addition results in a wrap, return None instead
+impl Add<Vector2> for Point2 {
+    type Output = Option<Self>;
+
+    fn add(self, rhs: Vector2) -> Self::Output {
+        let p: Point2<i64> = self.into();
+        Some(Self {
+            x: (p.x + rhs.x).try_into().ok()?,
+            y: (p.y + rhs.y).try_into().ok()?,
+        })
+    }
+}
+
+impl Sub<Vector2> for Point2 {
+    type Output = Option<Point2>;
+
+    fn sub(self, rhs: Vector2) -> Self::Output {
+        let p: Point2<i64> = self.into();
+        Some(Self {
+            x: (p.x - rhs.x).try_into().ok()?,
+            y: (p.y - rhs.y).try_into().ok()?,
+        })
+    }
+}
+
+impl From<Point2<usize>> for Point2<i64> {
+    fn from(value: Point2<usize>) -> Self {
+        Point2 {
+            // Assume no input is large enough to overflow
+            x: value.x.try_into().unwrap(),
+            y: value.y.try_into().unwrap(),
+        }
+    }
 }
 
 #[derive(
@@ -34,20 +81,6 @@ impl Vector2 {
         Self { x: 0, y: 1 },
         Self { x: 1, y: 1 },
     ];
-}
-
-/// If the addition results in a wrap, return None instead
-impl Add<Vector2> for Point2<usize> {
-    type Output = Option<Self>;
-
-    fn add(self, rhs: Vector2) -> Self::Output {
-        let x: i64 = self.x.try_into().unwrap();
-        let y: i64 = self.y.try_into().unwrap();
-        Some(Self {
-            x: (x + rhs.x).try_into().ok()?,
-            y: (y + rhs.y).try_into().ok()?,
-        })
-    }
 }
 
 #[derive(Copy, Clone, Debug, derive_more::Display, Eq, Hash, PartialEq)]
@@ -122,6 +155,15 @@ impl<T> Grid<T> {
         (0..height).flat_map(move |y| (0..width).map(move |x| Point2 { x, y }))
     }
 
+    /// Get an iterator over all values and points in the grid, starting at the
+    /// top-left and moving right, then down
+    pub fn iter(&self) -> impl Iterator<Item = (Point2, &T)> {
+        self.cells
+            .iter()
+            .enumerate()
+            .map(|(i, cell)| (self.get_point(i), cell))
+    }
+
     pub fn get(&self, point: Point2<usize>) -> Option<&T> {
         if self.is_valid(point) {
             Some(&self[point])
@@ -136,6 +178,13 @@ impl<T> Grid<T> {
 
     fn get_index(&self, point: Point2<usize>) -> usize {
         point.y * self.width + point.x
+    }
+
+    fn get_point(&self, index: usize) -> Point2 {
+        Point2 {
+            x: index % self.width,
+            y: index / self.width,
+        }
     }
 }
 
