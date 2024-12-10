@@ -81,6 +81,13 @@ impl Vector2 {
         Self { x: 0, y: 1 },
         Self { x: 1, y: 1 },
     ];
+    /// Up/right/left/down
+    pub const ADJACENT: [Self; 4] = [
+        Self { x: 0, y: -1 },
+        Self { x: 1, y: 0 },
+        Self { x: 0, y: 1 },
+        Self { x: -1, y: 0 },
+    ];
 }
 
 #[derive(Copy, Clone, Debug, derive_more::Display, Eq, Hash, PartialEq)]
@@ -170,6 +177,19 @@ impl<T> Grid<T> {
         } else {
             None
         }
+    }
+
+    /// Get an iterator of all `(point, value)` pairs in the grid adjacent to
+    /// the given point (up/down/left/right)
+    pub fn adjacents(
+        &self,
+        point: Point2<usize>,
+    ) -> impl Iterator<Item = (Point2, &T)> {
+        Vector2::ADJACENT.into_iter().filter_map(move |vector| {
+            let adj_point = (point + vector)?;
+            let value = self.get(adj_point)?;
+            Some((adj_point, value))
+        })
     }
 
     pub fn is_valid(&self, point: Point2<usize>) -> bool {
