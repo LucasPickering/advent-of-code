@@ -232,3 +232,56 @@ impl<T> IndexMut<Point2<usize>> for Grid<T> {
         &mut self.cells[index]
     }
 }
+
+/// Count the number of decimal digits in a number
+pub fn count_digits(n: u64) -> u32 {
+    if n == 0 {
+        1
+    } else {
+        n.ilog10() + 1
+    }
+}
+
+/// Split the digits in a decimal number into two parts. The second part will
+/// always have `right_len` digits, and the first will have whatever remains
+pub fn split_digits(n: u64, right_len: u32) -> (u64, u64) {
+    let prefix_base = 10u64.pow(right_len);
+    let prefix = n / prefix_base;
+    let suffix = n - (prefix * prefix_base);
+    (prefix, suffix)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_count_digits() {
+        assert_eq!(count_digits(0), 1);
+        assert_eq!(count_digits(1), 1);
+        assert_eq!(count_digits(3), 1);
+
+        assert_eq!(count_digits(10), 2);
+        assert_eq!(count_digits(33), 2);
+        assert_eq!(count_digits(99), 2);
+
+        assert_eq!(count_digits(100), 3);
+        assert_eq!(count_digits(999), 3);
+
+        assert_eq!(count_digits(1000), 4);
+        assert_eq!(count_digits(9999), 4);
+    }
+
+    #[test]
+    fn test_split_digits() {
+        assert_eq!(split_digits(0, 0), (0, 0));
+        assert_eq!(split_digits(1, 0), (1, 0));
+
+        assert_eq!(split_digits(123, 0), (123, 0));
+        assert_eq!(split_digits(123, 1), (12, 3));
+        assert_eq!(split_digits(123, 2), (1, 23));
+        assert_eq!(split_digits(123, 3), (0, 123));
+
+        assert_eq!(split_digits(54321, 4), (5, 4321));
+    }
+}

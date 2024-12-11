@@ -1,4 +1,4 @@
-use crate::{days::Part, tui::Tui};
+use crate::{days::Part, tui::Tui, util::count_digits};
 use std::fmt::Debug;
 
 pub struct Solver {
@@ -106,7 +106,7 @@ fn remove_suffix(a: Term, suffix: Term) -> Option<Term> {
     }
 
     // suffix = 345 -> len = 3
-    let suffix_len = suffix.ilog10() + 1;
+    let suffix_len = count_digits(suffix);
     // suffix = 345 -> base = 1000
     let prefix_base = 10u64.pow(suffix_len);
     // a = 12345, suffix = 345
