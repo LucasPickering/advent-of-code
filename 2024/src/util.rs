@@ -1,4 +1,8 @@
-use std::ops::{Add, Index, IndexMut, Sub};
+use std::{
+    collections::{HashMap, HashSet, VecDeque},
+    hash::Hash,
+    ops::{Add, Index, IndexMut, Sub},
+};
 
 #[derive(Copy, Clone, Debug, derive_more::Display, Eq, Hash, PartialEq)]
 #[display("({x},{y})")]
@@ -58,6 +62,8 @@ impl From<Point2<usize>> for Point2<i64> {
     Copy,
     Clone,
     Debug,
+    Eq,
+    PartialEq,
     derive_more::Display,
     derive_more::Add,
     derive_more::Sub,
@@ -99,6 +105,8 @@ pub enum Direction {
 }
 
 impl Direction {
+    pub const ALL: [Self; 4] = [Self::Up, Self::Right, Self::Down, Self::Left];
+
     /// Get the next direction clockwise
     pub fn clockwise(&self) -> Direction {
         match self {
@@ -106,6 +114,15 @@ impl Direction {
             Self::Right => Self::Down,
             Self::Down => Self::Left,
             Self::Left => Self::Up,
+        }
+    }
+
+    pub fn vector(&self) -> Vector2 {
+        match self {
+            Direction::Up => Vector2 { x: 0, y: -1 },
+            Direction::Right => Vector2 { x: 1, y: 0 },
+            Direction::Down => Vector2 { x: 0, y: 1 },
+            Direction::Left => Vector2 { x: -1, y: 0 },
         }
     }
 }
@@ -192,6 +209,66 @@ impl<T> Grid<T> {
         })
     }
 
+    /// Group all cells in grid into contiguous regions, according to some
+    /// classification. Any two cells that are adjacent (up/down/left/right) and
+    /// belong to the same class will be grouped together.
+    pub fn clusters<K>(
+        &self,
+        classifier: impl Fn(&T) -> K,
+    ) -> Vec<Cluster<'_, K, T>>
+    where
+        K: Hash + PartialEq,
+    {
+        // Here's our algorithm:
+        // - Grab the first cell in the grid
+        // - Do a BFS out from that cell, including all cells that belong to the
+        //   same class
+        // - Once we run out of matchings items, consider the cluster complete
+        // - Grab the next cell in the grid that hasn't been clustered yet
+
+        let mut clusters = Vec::new();
+        let mut done: HashSet<Point2> = HashSet::new();
+
+        for (point, value) in self.iter() {
+            if done.contains(&point) {
+                continue;
+            }
+
+            let class = classifier(value);
+            done.insert(point);
+            let mut cluster_cells = HashMap::new();
+            let mut bfs_queue: VecDeque<(Point2, &T)> = VecDeque::new();
+            // Seed the queue
+            bfs_queue.push_front((point, value));
+
+            // Grab the next cell off the queue and check it
+            while let Some((point, value)) = bfs_queue.pop_front() {
+                // If this is part of the same class, add to the cluster and
+                // add its neighbors to the queue
+                if classifier(value) == class {
+                    done.insert(point);
+                    cluster_cells.insert(point, value);
+
+                    // Add any neighbors that haven't already been checked to
+                    // the queue. This filter is necessary to prevent cycles
+                    bfs_queue.extend(self.adjacents(point).filter(
+                        |(adj_point, _)| {
+                            !done.contains(adj_point)
+                                && !cluster_cells.contains_key(adj_point)
+                        },
+                    ));
+                }
+            }
+
+            clusters.push(Cluster {
+                class,
+                cells: cluster_cells.into_iter().collect(),
+            });
+        }
+
+        clusters
+    }
+
     pub fn is_valid(&self, point: Point2<usize>) -> bool {
         point.x < self.width && point.y < self.height
     }
@@ -231,6 +308,13 @@ impl<T> IndexMut<Point2<usize>> for Grid<T> {
         let index = self.get_index(point);
         &mut self.cells[index]
     }
+}
+
+/// A contiguous group of cells within a grid
+#[derive(Debug)]
+pub struct Cluster<'a, K, T> {
+    pub class: K,
+    pub cells: Vec<(Point2, &'a T)>,
 }
 
 /// Count the number of decimal digits in a number
