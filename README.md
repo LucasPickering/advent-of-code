@@ -29,3 +29,11 @@ Rust again!
 ```sh
 cargo run -- 1 2 # Day 1, part 2, reads input from input/day1.txt
 ```
+
+## 2024
+
+Rust again!
+
+## 2025 
+
+Gleam!
